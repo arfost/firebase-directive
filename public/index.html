@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.5.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.5.0/firebase-database.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      .demo p { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      .button-container {
+        display: flex;
+        justify-content: space-evenly;
+      }
+      button {
+                color:var(--primary-text-color,#000000);
+                background-color:var(--primary-light-color, #pink)
+                cursor: pointer;
+                box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+                -webkit-transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+                transition: box-shadow .28s cubic-bezier(.4,0,.2,1);
+                will-change: box-shadow;
+                min-width: 88px;
+                border-radius: 1em;
+              }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Bienvenu</h2>
+      <h1>Firebase lit-html directive demo</h1>
+      <p>Ceci est une petite demonstration pour une directive lit-html avec firebase. Le fonctionnement est expliqué dans l'article suivant</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Lire l'article</a>
+      <div class="demo">
+        <div>
+          <p id="demo-result">Chargement de la demo &hellip;</p>
+        </div>
+        <div>
+          <p id="demo-change-value">Changez la valeur</p>
+          <div class="button-container">
+            <button id="rouge">rouge</button>
+            <button id="bleu">bleu</button>
+            <button id="vert">vert</button>
+          </div>
+        <div>
+
+      </div>
+    </div>
+    <script type="module">
+    //import for lit-html
+    import { directive, html, render } from 'https://unpkg.com/lit-html@0.10.2/lit-html.js?module';
+
+    //the actual directive
+    const onFirebasedata = (ref, content, defaultContent, emptyContent) => directive(part => {
+        part.setValue(defaultContent);
+          ref.on("value", snap => {
+              let data = snap.val();
+              console.log("data : ", data)
+              if (data !== undefined && data !== null) {
+                  part.setValue(content(data))
+              }else if(emptyContent){
+                part.setValue(emptyContent);
+              }
+          })
+      });
+
+      //initialize le SDK firebase et assigne la directive a un noeud du dom
+      document.addEventListener('DOMContentLoaded', function() {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        try {
+          let app = firebase.app();
+          const valueRef = firebase.database().ref('value')
+          document.getElementById('rouge').addEventListener('click', e=>{
+            valueRef.set("rouge")
+          })
+          document.getElementById('bleu').addEventListener('click', e=>{
+            valueRef.set("bleu")
+          })
+          document.getElementById('vert').addEventListener('click', e=>{
+            valueRef.set("vert")
+          })
+          render(html`La valeur est ${onFirebasedata(valueRef, data => html`${data}`, html`loading`, html`empty`)}`, document.getElementById('demo-result'))
+        } catch (e) {
+          console.error(e);
+          render(html`Error loading the Firebase SDK, check the console.`, document.getElementById('demo-result'))
+        }
+
+      });
+    </script>
+  </body>
+</html>
