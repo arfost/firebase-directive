@@ -81,14 +81,14 @@
           })
       });
 
-      //initialize le SDK firebase et assigne la directive a un noeud du dom
+      //initialize the firebase SDK and assign the directive to a dom node
       document.addEventListener('DOMContentLoaded', function() {
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         try {
+          //creatinf firebase app
           let app = firebase.app();
+          //getting database ref
           const valueRef = firebase.database().ref('value')
+          //adding event listener for the change value buttons, not necessary to use directive, only for the demo
           document.getElementById('rouge').addEventListener('click', e=>{
             valueRef.set("rouge")
           })
@@ -98,6 +98,7 @@
           document.getElementById('vert').addEventListener('click', e=>{
             valueRef.set("vert")
           })
+          //assign the directive to the demo-result dom node
           render(html`La valeur est ${onFirebasedata(valueRef, data => html`${data}`, html`loading`, html`empty`)}`, document.getElementById('demo-result'))
         } catch (e) {
           console.error(e);
