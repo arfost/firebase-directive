@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>Welcome to firebase lit-html directive</title>
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/5.5.0/firebase-app.js"></script>
@@ -44,10 +44,10 @@
   </head>
   <body>
     <div id="message">
-      <h2>Bienvenu</h2>
+      <h2>Welcome</h2>
       <h1>Firebase lit-html directive demo</h1>
-      <p>Ceci est une petite demonstration pour une directive lit-html avec firebase. Le fonctionnement est expliqué dans l'article suivant</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Lire l'article</a>
+      <p>Ceci est une petite demonstration pour une directive lit-html avec firebase. Le fonctionnement est expliqué dans l'article suivant (non ecrit pour l'instant)</p>
+      <a target="_blank" href="">Lire l'article</a>
       <div class="demo">
         <div>
           <p id="demo-result">Chargement de la demo &hellip;</p>
@@ -65,7 +65,7 @@
     </div>
     <script type="module">
     //import for lit-html
-    import { directive, html, render } from 'https://unpkg.com/lit-html@0.10.2/lit-html.js?module';
+    import { directive, html, render } from 'https://unpkg.com/lit-html@latest/lit-html.js?module';
 
     //the actual directive
     const onFirebasedata = (ref, content, defaultContent, emptyContent) => directive(part => {
@@ -78,6 +78,8 @@
               }else if(emptyContent){
                 part.setValue(emptyContent);
               }
+              //added to work with latest version
+              part.commit()
           })
       });
 
